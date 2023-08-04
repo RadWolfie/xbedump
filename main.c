@@ -14,7 +14,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <string.h>
@@ -140,12 +142,12 @@ int main (int argc, const char * argv[])
 		load_rsa(dumpflag);
 		
 		if (dumpflag & 0x00000FFF) {
-				load_xbefile(xbefile,filesize,&filename[0]);
+				load_xbefile(&xbefile, &filesize,&filename[0]);
 				dumpxbe(xbefile,dumpflag);
 				}
 		if (dumpflag & 0x0fff0000) {
-				load_xbefile(xbefile,filesize,&filename[0]);						
-				validatexbe(xbefile,filesize,dumpflag);
+				load_xbefile(&xbefile, &filesize,&filename[0]);
+				validatexbe(xbefile, filesize,dumpflag);
 				}
 						
 		// Verify the signed file
@@ -157,7 +159,7 @@ int main (int argc, const char * argv[])
 				strcpy(&filename[0],"out.xbe");
 				printf("\n File out.xbe created, verifying it ...\n\n");
 				free(xbefile);
-				load_xbefile(xbefile,filesize,&filename[0]);
+				load_xbefile(&xbefile, &filesize,&filename[0]);
 				validatexbe(xbefile,filesize,dumpflag);
 				
 			}

@@ -14,7 +14,9 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
+#ifndef WIN32
 #include <unistd.h>
+#endif
 #include <stdarg.h>
 #include <stdlib.h>
 #include <stdint.h>
@@ -164,7 +166,7 @@ int read_rsafrombin_asterix()
     	if (f!=NULL) 
     	{    
         	fseek(f, 0, SEEK_END); 
-		filesize = ftell(f); 
+		filesize = ftell(f);
 		fseek(f, 0, SEEK_SET);
         	
         	flash = (unsigned char*) malloc(filesize);
@@ -564,7 +566,7 @@ int read_rsafromflash(char *filename,unsigned int dumpflag)
 }
            
            
-int load_xbefile(void* &xbe,unsigned int &filesize,char *filename) {
+int load_xbefile(void** xbe,unsigned int* filesize,char *filename) {
   
    FILE *f;
    void *file;
@@ -572,14 +574,14 @@ int load_xbefile(void* &xbe,unsigned int &filesize,char *filename) {
    f = fopen(filename, "rb");
    if (f!=NULL) 
     {
-         fseek(f, 0, SEEK_END); 
-         filesize = ftell(f); 
+         fseek(f, 0, SEEK_END);
+         *filesize = ftell(f);
          fseek(f, 0, SEEK_SET);
 //         printf("Loading file %s (%i bytes)\n", filename, filesize);
          
-         file = malloc(filesize);
-         xbe=file;
-         fread(file, 1, filesize, f);
+         file = malloc(*filesize);
+         *xbe=file;
+         fread(file, 1, *filesize, f);
          fclose(f);	
    } else {
 	fprintf(stderr,"Error opening %s - %s\n",filename,strerror(errno));
