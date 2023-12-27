@@ -87,8 +87,8 @@ int validatexbe(void *xbe,unsigned int filesize,unsigned int option_flag){
 	if (option_flag & 0x00020000) {
 		if (option_flag & 0x20000000) { // Habibi Option 
 			printf("Correcting Mediatypes and Regions  \n");
-			cert->MediaTypes = 0x800000FF;
-			cert->GameRegion = 0x80000007;
+			cert->MediaTypes = 0x400000FF; // was 0x800000FF
+			cert->GameRegion = 0x7FFFFFFF; // emulating like dashboard use // was 0x80000007
 		}
 	}
 	// Validates the Section Header Address 
